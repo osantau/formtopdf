@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import oct.soft.PdfService;
 import oct.soft.dto.FormDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -36,8 +37,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class SiteController {
 
-    @Value("${report.file}")
-    String reportFile;
+    private final PdfService pdfService;
+
+    public SiteController(PdfService pdfService) {
+        this.pdfService = pdfService;
+    }
 
     @GetMapping("/")
     public String home(Model model) {
@@ -47,41 +51,21 @@ public class SiteController {
 
     @PostMapping("/generate-pdf")
     public ResponseEntity<byte[]> generatePdf(@ModelAttribute FormDto formDto) throws Exception {
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", formDto.getName());
-        params.put("email", formDto.getEmail());
-        params.put("phone", formDto.getPhone());
-        params.put("message", formDto.getMessage());
-        params.put("logoPath","reports/tiger8trns.png");
-        JasperPrint jp = JasperFillManager.fillReport(reportFile, params, new JREmptyDataSource());
-        
-        // Export to byte[]
-        byte[] pdfBytes = JasperExportManager.exportReportToPdf(jp);       
-        // Save to disk
-        Path pdfDir = Paths.get("pdf");
-        Files.createDirectories(pdfDir);
-        String fileName = "report_" + System.currentTimeMillis() + ".pdf";
-        Path pdfPath = pdfDir.resolve(
-                fileName
-        );
-        Files.write(pdfPath, pdfBytes);
-        JRDocxExporter exporter = new JRDocxExporter();
-        exporter.setExporterInput(new SimpleExporterInput(jp));
-exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(new File("report.docx")));
-exporter.exportReport();
+        String fileName = "report_" + System.currentTimeMillis();
         // Send to browser
- /* Download instead of inline headers.setContentDisposition(
+        /* Download instead of inline headers.setContentDisposition(
     ContentDisposition
         .attachment()
         .filename("report.pdf")
         .build()
 );*/
+        byte[] pdfBytes = pdfService.generatePdf(formDto, fileName);
         return ResponseEntity.ok()
-            .contentType(MediaType.APPLICATION_PDF)
-            .header(
-                HttpHeaders.CONTENT_DISPOSITION,
-                "inline; filename="+fileName+""
-            )
-            .body(pdfBytes);
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=" + fileName + ".pdf"
+                )
+                .body(pdfBytes);
     }
 }
