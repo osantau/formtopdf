@@ -30,11 +30,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
@@ -58,7 +58,11 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>           
         </dependency>
-
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>tinymce</artifactId>
+            <version>5.0.9</version>
+        </dependency>
     </dependencies>
 
     <build>

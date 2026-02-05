@@ -33,13 +33,9 @@ public class PdfService {
     @Value("${report.file}")
     String reportFile;
 
-    public byte[] generatePdf(@ModelAttribute FormDto formDto, String fileName) throws Exception {
+    public byte[] generatePdf(Map<String,String> formParams, String fileName) throws Exception {
         Map<String, Object> params = new HashMap<>();
-        params.put("name", formDto.getName());
-        params.put("email", formDto.getEmail());
-        params.put("phone", formDto.getPhone());
-        params.put("message", formDto.getMessage());
-        params.put("logoPath", "reports/tiger8trns.png");
+        params.putAll(formParams);
         JasperPrint jp = JasperFillManager.fillReport(reportFile, params, new JREmptyDataSource());
         // Export to byte[]
         byte[] pdfBytes = JasperExportManager.exportReportToPdf(jp);

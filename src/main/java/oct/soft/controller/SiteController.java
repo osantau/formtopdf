@@ -9,8 +9,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -50,7 +52,7 @@ public class SiteController {
     }
 
     @PostMapping("/generate-pdf")
-    public ResponseEntity<byte[]> generatePdf(@ModelAttribute FormDto formDto) throws Exception {
+    public ResponseEntity<byte[]> generatePdf(HttpServletRequest req) throws Exception {
         String fileName = "report_" + System.currentTimeMillis();
         // Send to browser
         /* Download instead of inline headers.setContentDisposition(
@@ -59,7 +61,15 @@ public class SiteController {
         .filename("report.pdf")
         .build()
 );*/
-        byte[] pdfBytes = pdfService.generatePdf(formDto, fileName);
+        Enumeration<String> paraNames = req.getParameterNames();
+        Map<String,String> formParams = new HashMap<>();
+        while(paraNames.hasMoreElements())
+        {
+            String pName = paraNames.nextElement();
+            formParams.put(pName,req.getParameterValues(pName)[0]);
+        }
+        System.out.println(formParams);
+        byte[] pdfBytes = pdfService.generatePdf(formParams, fileName);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(
@@ -67,5 +77,17 @@ public class SiteController {
                         "inline; filename=" + fileName + ".pdf"
                 )
                 .body(pdfBytes);
+    }
+    
+    @PostMapping("/handle-form")
+    public String handleForm(HttpServletRequest req)
+    {   
+        Enumeration<String> paraNames = req.getParameterNames();
+        while(paraNames.hasMoreElements())
+        {
+            String pName = paraNames.nextElement();
+            System.out.println(pName + " : "+req.getParameterValues(pName)[0]);
+        }
+        return "success";
     }
 }

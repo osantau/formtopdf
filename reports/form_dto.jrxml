@@ -13,6 +13,9 @@
 	<parameter name="logoPath" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["tiger8trns.png"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="vehicle1" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="vehicle2" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="vehicle3" class="java.lang.String" isForPrompting="false"/>
 	<detail>
 		<band height="802" splitType="Stretch">
 			<image>
@@ -124,18 +127,35 @@
 				<text><![CDATA[Message]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="18" y="333" width="524" height="103"/>
-				<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4">
-					<topPen lineWidth="0.25" lineStyle="Solid"/>
-					<leftPen lineWidth="0.25" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
-					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				<reportElement x="14" y="313" width="100" height="20"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.25" lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.25" lineStyle="Dashed"/>
 				</box>
-				<textElement>
-					<font fontName="DejaVu Serif" size="10"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.]]></text>
+				<text><![CDATA[Vehicles]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="114" y="313" width="317" height="134"/>
+				<box leftPadding="4">
+					<topPen lineWidth="0.25" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.25" lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.25" lineStyle="Dashed"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{vehicle1}!=null?$P{vehicle1}+"\n":"")
++
+($P{vehicle2}!=null?$P{vehicle2}+"\n":"")
++
+($P{vehicle3}!=null?$P{vehicle3}:"")]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

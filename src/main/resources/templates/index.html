@@ -6,6 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
             <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+             <script th:src="@{/webjars/tinymce/tinymce.min.js}"></script>
+                <script>
+        tinymce.init({
+            selector: '#message',
+            height: 400,
+            plugins: 'lists link image table code',
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+        });
+    </script>
     </head>
     <body>
         <div class="container">
@@ -27,6 +36,15 @@
                     <label for="message" class="form-label">Message</label>
                     <textarea class="form-control" id="message" name="message" th:field="*{message}" rows="4" placeholder="Enter Your Message:" required></textarea>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Vehicle</label>
+                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                        <label for="vehicle1"> I have a bike</label>
+                        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">&nbsp;
+                    <label for="vehicle2"> I have a car</label>
+                    <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">&nbsp;
+                    <label for="vehicle3"> I have a boat</label>
+                                  </div>
                 <button type="submit" name="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
